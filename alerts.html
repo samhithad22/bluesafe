@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alert System - BlueSafe Marine</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-bell"></i> Alert Center
+            </div>
+            <div class="nav-links">
+                <a href="dashboard.html" class="btn btn-primary">Dashboard</a>
+            </div>
+        </nav>
+    </header>
+    <main class="container">
+        <h1>Alert & Notification System</h1>
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3><i class="fas fa-exclamation-triangle"></i> Active Alerts <span class="metric danger">2</span></h3>
+                <div id="activeAlerts">
+                    <div class="alert-item danger">
+                        <i class="fas fa-radiation"></i> High Chemical Levels - Zone A<br>
+                        <small>Triggered 5min ago • Notify Authorities</small>
+                        <button class="btn btn-danger btn-sm">Siren On</button>
+                    </div>
+                    <div class="alert-item warning">
+                        <i class="fas fa-trash-alt"></i> Plastic Accumulation - Beach X<br>
+                        <small>Volunteer needed • Level: High</small>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-history"></i> Alert History</h3>
+                <ul>
+                    <li>2026-01-15: Illegal Dumping Detected</li>
+                    <li>2025-09-14: pH Drop Alert</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-bullhorn"></i> Notify</h3>
+                <button class="btn btn-warning" onclick="testSiren()" style="width:100%; margin-bottom:1rem;">Test Siren</button>
+                <button class="btn btn-success" onclick="notifyAll()" style="width:100%;">Notify Volunteers</button>
+                <button class="btn btn-info" onclick="notifyAuthority()" style="width:100%;">Notify Authorities</button>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 2rem;">
+            <button class="btn btn-danger" onclick="showTestAlert()">🧪 Test Alert Button</button>
+        </div>
+    </main>
+    <!-- Test Alert Modal -->
+    <div id="alertModal" class="alert-modal">
+        <div class="alert-content">
+            <div class="alert-header">
+                <h3 id="alertIcon" class="alert-icon"><i class="fas fa-exclamation-triangle"></i></h3>
+                <span id="alertType" class="alert-type">High Priority Alert</span>
+            </div>
+            <div class="alert-body">
+                <p id="alertMessage" class="alert-message"></p>
+                <div class="alert-details">
+                    <div><strong>Location:</strong> <span id="alertLocation">Zone A - Beach Sector 3</span></div>
+                    <div><strong>Time:</strong> <span id="alertTime"></span></div>
+                    <div><strong>Severity:</strong> <span id="alertSeverity" class="severity-high">CRITICAL</span></div>
+                    <div><strong>Sensor:</strong> Chemical Analyzer #001</div>
+                </div>
+                <div class="alert-actions">
+                    <button class="btn btn-danger btn-sm" onclick="playSiren()">🔊 Siren On</button>
+                    <button class="btn btn-warning btn-sm" onclick="notifyVolunteers()">Notify Volunteers</button>
+                    <button class="btn btn-info btn-sm" onclick="acknowledgeAlert()">Acknowledge</button>
+                </div>
+            </div>
+            <button class="close-btn" onclick="closeAlert()">&times;</button>
+        </div>
+    </div>
+    <audio id="siren" preload="auto" src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF9vY2VsYXNo"></audio>
+    <script src="script.js"></script>
+    <script>
+        function testSiren() {
+            showTestAlert('Siren Test');
+        }
+        function notifyAll() {
+            alert('Notifications sent to all volunteers!');
+        }
+        function notifyAuthority() {
+            alert('Authority notified - Urgent collection required.');
+        }
+
+        // Enhanced test alert with detailed information
+        function showTestAlert(type = 'Chemical Detection') {
+            const now = new Date().toLocaleString();
+            document.getElementById('alertIcon').innerHTML = type === 'Chemical Detection' ? 
+                '<i class="fas fa-radiation"></i>' : '<i class="fas fa-trash-alt"></i>';
+            document.getElementById('alertType').textContent = `Test: ${type}`;
+            document.getElementById('alertMessage').textContent = 
+                `Test alert triggered successfully! Simulating ${type.toLowerCase()} in coastal zone. 
+                pH: ${6.8.toFixed(1)}, Chemicals: ${85}ppm, Turbidity: ${32}NTU`;
+            document.getElementById('alertLocation').textContent = 'Test Zone B - Marine Bay Area';
+            document.getElementById('alertTime').textContent = now;
+            document.getElementById('alertSeverity').textContent = 'HIGH';
+            document.getElementById('alertSeverity').className = 'severity-high';
+            
+            // Trigger modal and siren
+            triggerAlert('');
+        }
+
+        // Modal action helpers
+        function playSiren() {
+            const audio = document.getElementById('siren');
+            audio.currentTime = 0;
+            audio.play().catch(e => console.log('Siren simulation'));
+            alert('🚨 Siren activated for 30 seconds!');
+        }
+
+        function notifyVolunteers() {
+            closeAlert();
+            alert('📱 Push notifications sent to 47 nearby volunteers!');
+        }
+
+        function acknowledgeAlert() {
+            closeAlert();
+            alert('✅ Alert acknowledged and logged.');
+        }
+    </script>
+    <style>
+        .alert-item {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid;
+            border-radius: 4px;
+        }
+        .alert-item.danger { border-left-color: var(--danger-red); background: rgba(220,53,69,0.1); }
+        .alert-item.warning { border-left-color: var(--warning-yellow); background: rgba(255,193,7,0.1); }
+        .btn-sm { padding: 5px 10px; font-size: 0.8rem; }
+
+        /* Modal Styles */
+        .alert-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+        .alert-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: modalSlideIn 0.3s ease;
+        }
+        .alert-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #eee;
+        }
+        .alert-icon {
+            font-size: 2.5rem;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--danger-red);
+            color: white;
+        }
+        .alert-type {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--danger-red);
+        }
+        .alert-message {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        .alert-details {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+        .alert-details div {
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .severity-high { color: var(--danger-red); font-weight: bold; }
+        .severity-medium { color: var(--warning-yellow); font-weight: bold; }
+        .alert-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+        }
+        .close-btn:hover { color: var(--danger-red); }
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        @media (max-width: 768px) {
+            .alert-actions { flex-direction: column; }
+        }
+    </style>
+</body>
+</html>

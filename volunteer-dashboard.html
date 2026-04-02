@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Dashboard - BlueSafe Marine</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-users"></i>
+                <span>Volunteer Portal</span>
+            </div>
+            <div class="nav-links">
+                <a href="dashboard.html" class="btn btn-secondary"><i class="fas fa-chart-line"></i> Main Dashboard</a>
+                <a href="awareness.html" class="btn btn-success">Awareness</a>
+                <a href="index.html" onclick="localStorage.removeItem('role')" class="btn btn-danger">Logout</a>
+            </div>
+        </nav>
+    </header>
+<main class="container">
+        <!-- Ocean Hero -->
+        <section class="vol-hero">
+            <h1><i class="fas fa-users"></i> Welcome, Water Guardian!</h1>
+            <p>Join the fight to save water - every action counts!</p>
+        </section>
+
+        <div class="dashboard-grid">
+            <!-- Gamified Profile -->
+            <div class="card profile-card">
+                <h3><i class="fas fa-user-circle"></i> Your Profile</h3>
+                <div id="badges-list"></div>
+                <p>Level: <span id="vol-level" class="metric">5</span></p>
+                <p>Points: <span id="vol-points" class="metric">420</span></p>
+                <div class="level-bar">
+                    <div id="level-progress" class="level-fill" style="width: 42%"></div>
+                </div>
+            </div>
+
+            <!-- Tasks -->
+            <div class="card">
+                <h3><i class="fas fa-tasks"></i> Daily Quests</h3>
+                <div id="tasks-list"></div>
+                <p>Share awareness message <span id="vol-level" class="metric"></span></p>
+                <p>Invite 1 friend as volunteer <span id="vol-points" class="metric"></span></p>
+                
+            </div>
+
+            <!-- Leaderboard -->
+            <div class="card">
+                <h3><i class="fas fa-trophy"></i> Leaderboard</h3>
+                <div class="leaderboard">
+                    <p>Score <span id="vol-level" class="metric">10</span></p>
+                <p>Rank <span id="vol-points" class="metric">12</span></p>
+                
+                    <!-- Dynamic leaderboard -->
+                </div>
+            </div>
+
+            <!-- Report Form -->
+            <div class="card">
+                <h3><i class="fas fa-exclamation-circle"></i> Quick Report +25pts</h3>
+                <form id="reportForm">
+                    <input type="text" id="report-loc" placeholder="Location (e.g. Beach X)" required style="width:100%; padding:0.5rem; margin:0.5rem 0;">
+                    <select id="report-type" style="width:100%; padding:0.5rem; margin:0.5rem 0;">
+                        <option>Plastic Waste</option>
+                        <option>Chemical Spill</option>
+                        <option>Oil Slick</option>
+                    </select>
+                    <button type="submit" class="btn btn-warning" style="width:100%;">Submit & Earn Points!</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Hotspot Map with volunteer pins -->
+            <div class="card">
+                <h3><i class="fas fa-map-marked-alt"></i> Action Hotspots</h3>
+                <div id="volMap" class="map-container"></div>
+            </div>
+
+            <!-- Activity Chart -->
+            <div class="card">
+                <h3><i class="fas fa-chart-pie"></i> Your Impact Chart</h3>
+                <canvas id="volChart" height="200"></canvas>
+            </div>
+
+            <!-- Impact Stats -->
+            <div class="card">
+                <h3><i class="fas fa-fish"></i> Lifetime Impact</h3>
+                <p>🐟 Fish Saved: <span class="impact-stat metric">20</span></p>
+                <p>🛸 Trash Removed: <span class="impact-stat metric">150</span>kg</p>
+                <p>🌊 Beaches Cleaned: <span class="impact-stat metric">12</span></p>
+            </div>
+        </div>
+    </main>
+
+    <div id="alertModal" class="alert-modal">
+        <h3><i class="fas fa-exclamation-triangle"></i> Alert!</h3>
+        <p class="alert-message"></p>
+        <button onclick="closeAlert()" class="btn btn-danger">Dismiss</button>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (getRole() !== 'volunteer') window.location.href = 'index.html';
+
+            // Init volunteer features
+            initMap('volMap');
+            initVolunteerChart('volChart');
+            updateVolunteerMetrics();
+            updateLeaderboard();
+            renderTasks();
+
+            // Form submission
+            document.getElementById('reportForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const loc = document.getElementById('report-loc').value;
+                const type = document.getElementById('report-type').value;
+                alert(submitReport({location: loc, type: type}));
+                e.target.reset();
+            });
+
+            // Task clicks
+            document.addEventListener('click', (e) => {
+                if (e.target.dataset.taskId) {
+                    completeTask(parseInt(e.target.dataset.taskId));
+                }
+            });
+
+            setInterval(() => {
+                updateVolunteerMetrics();
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

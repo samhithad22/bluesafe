@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authority Dashboard - BlueSafe Marine</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-shield-alt"></i>
+                <span>Authority Panel</span>
+            </div>
+            <div class="nav-links">
+                <a href="dashboard.html" class="btn btn-secondary"><i class="fas fa-chart-line"></i> Main Dashboard</a>
+                <a href="waste-management.html" class="btn btn-info">Waste Management</a>
+                <a href="index.html" onclick="localStorage.removeItem('role')" class="btn btn-danger">Logout</a>
+            </div>
+        </nav>
+    </header>
+    <main class="container">
+        <h1>Authority Control Panel</h1>
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3><i class="fas fa-trash-alt"></i> Waste Collection Needs</h3>
+                <div id="collectionStats">
+                    <p>High Priority Zones: <span class="metric danger">3</span></p>
+                    <p>Pending Collections: <span class="metric warning">12</span></p>
+                    <p>Optimized Routes Ready</p>
+                </div>
+                <button class="btn btn-success" onclick="generateRoutes()">Generate Routes</button>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-map-marker-alt"></i> Collection Map</h3>
+                <div id="authMap" class="map-container"></div>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-robot"></i> AI Suggestions</h3>
+                <ul>
+                    <li>Route 1: Zone A -> B (Est. 2hrs, 500kg waste)</li>
+                    <li>Route 2: Zone C (Priority, Hazardous)</li>
+                    <li>Auto-cleaning scheduled</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-bell"></i> Recent Alerts</h3>
+                <div id="authAlerts"></div>
+            </div>
+        </div>
+    </main>
+
+    <div id="alertModal" class="alert-modal">
+        <h3><i class="fas fa-exclamation-triangle"></i> Alert!</h3>
+        <p class="alert-message"></p>
+        <button onclick="closeAlert()" class="btn btn-danger">Acknowledge</button>
+    </div>
+    <audio id="siren" src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMc"></audio>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (getRole() !== 'authority') window.location.href = 'index.html';
+            initMap('authMap');
+            updateMetrics();
+            document.getElementById('authAlerts').innerHTML = `
+                <p>• Illegal dumping at Zone 2 (10min ago)</p>
+                <p>• High chemical levels Zone 4</p>
+            `;
+        });
+
+        function generateRoutes() {
+            alert('Optimized routes generated based on bin levels and pollution data!');
+        }
+    </script>
+</body>
+</html>

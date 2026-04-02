@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Awareness - BlueSafe Marine</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-leaf"></i> Awareness Hub
+            </div>
+            <div class="nav-links">
+                <a href="dashboard.html" class="btn btn-primary">Dashboard</a>
+            </div>
+        </nav>
+    </header>
+    <main class="container">
+        <h1>Public Awareness & Impact</h1>
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3><i class="fas fa-fish"></i> Aquatic Lives Saved</h3>
+                <div class="metric success" id="livesSaved">1,247</div>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-weight-hanging"></i> Waste Collected</h3>
+                <div class="metric success" id="wasteCollected">5,680 kg</div>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-users"></i> Volunteers Engaged</h3>
+                <div class="metric info" id="volunteers">892</div>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-chart-pie"></i> Cleanup Success</h3>
+                <div class="progress-bar"><div class="progress-fill" style="width:92%"></div></div>
+                <p>92% Zones Clean</p>
+            </div>
+        </div>
+        <div class="card" style="grid-column: 1 / -1;">
+            <h3><i class="fas fa-lightbulb"></i> Educational Insights</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap:2rem;">
+                <div>
+                    <h4>Why Marine Pollution?</h4>
+                    <p>Plastic takes 450 years to decompose, killing 1M seabirds yearly.</p>
+                </div>
+                <div>
+                    <h4>Your Impact</h4>
+                    <p>Every report helps save marine life. Join as volunteer!</p>
+                </div>
+                <div>
+                    <h4>AI Cleaning</h4>
+                    <p>Autonomous drones collect waste 24/7 without human risk.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        // Animated counters
+        function animateCounter(id, target, duration = 2000) {
+            let start = 0;
+            const increment = target / (duration / 16);
+            const timer = setInterval(() => {
+                start += increment;
+                if (start >= target) {
+                    document.getElementById(id).textContent = target.toLocaleString();
+                    clearInterval(timer);
+                } else {
+                    document.getElementById(id).textContent = Math.floor(start).toLocaleString();
+                }
+            }, 16);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            animateCounter('livesSaved', 1247);
+            animateCounter('wasteCollected', 5680);
+            animateCounter('volunteers', 892);
+        });
+    </script>
+</body>
+</html>

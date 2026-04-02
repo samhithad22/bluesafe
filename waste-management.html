@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waste Management - BlueSafe Marine</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-recycle"></i> Waste Management
+            </div>
+            <div class="nav-links">
+                <a href="dashboard.html" class="btn btn-primary">Dashboard</a>
+            </div>
+        </nav>
+    </header>
+    <main class="container">
+        <h1>Smart Waste Management System</h1>
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3><i class="fas fa-trash-can"></i> Smart Bins Status</h3>
+                <div>
+                    <p>Bin 1 (Recyclable) <div class="progress-bar"><div class="progress-fill bin-fill" id="bin1"></div></div></p>
+                    <p>Bin 2 (Non-recyclable) <div class="progress-bar"><div class="progress-fill bin-fill" id="bin2"></div></div></p>
+                    <p>Bin 3 (Hazardous) <div class="progress-bar"><div class="progress-fill bin-fill danger" id="bin3" style="background: var(--danger-red)"></div></div></p>
+                </div>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-brain"></i> AI Waste Segregation</h3>
+                <select id="wasteType" style="width:100%; padding:10px; margin-bottom:1rem;">
+                    <option>Upload Waste Image for Classification</option>
+                    <option>Plastic Bottle - Recyclable</option>
+                    <option>Organic Waste - Compost</option>
+                    <option>Chemical Container - Hazardous</option>
+                </select>
+                <button class="btn btn-info" onclick="classifyWaste()" style="width:100%;">Classify</button>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-map-location-dot"></i> Bin GPS Tracking</h3>
+                <div id="binMap" class="map-container"></div>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initMap('binMap');
+            updateMetrics(); // Updates bins
+        });
+        function classifyWaste() {
+            const type = document.getElementById('wasteType').value;
+            alert(`AI Classification: ${type}`);
+        }
+    </script>
+</body>
+</html>
